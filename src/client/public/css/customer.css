@@ -1,7 +1,89 @@
 #header {
   margin-top: 1em;
+
+  display: table;
 }
 
-#order {
-  margin-bottom: 2em;
+#filter-options, #order-info-text
+{
+  display: table-cell;
+  width: auto;
+  white-space: nowrap;
+}
+
+#filter-options-text
+{
+  font-size: 1.25rem;
+}
+
+#filter-options input
+{
+  margin-left: 8px;
+}
+
+.header-lr-filler
+{
+  display: table-cell;
+  width: 100%;
+  min-width: 20px;
+}
+
+/*
+#filter-options-container
+{
+  position: relative;
+  display: inline;
+}
+*/
+
+#filter-options label
+{
+  font-size: 1rem;
+  line-height: 1rem;
+}
+
+.image-picker,.image-picker *
+{
+  box-shadow: none !important;
+}
+
+#file-button
+{
+  padding: 10px;
+  color: white;
+  background-color: #02b100;
+  border: 1px solid #000;
+  border-radius: 5px;
+  cursor: pointer;
+}
+#file-button:hover
+{
+  background-color: #21ba45;
+}
+
+#real-file
+{
+  position: absolute;
+  z-index: -1;
+  width: 1px;
+  height: 1px;
+}
+
+#custom-text
+{
+  margin-left: 10px;
+  font-family: sans-serif;
+  color: #aaa;
+}
+#generate
+{
+  height: 50px; 
+}
+
+#game-info-container
+{
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
 }

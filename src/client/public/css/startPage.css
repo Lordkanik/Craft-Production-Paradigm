@@ -14,4 +14,8 @@
 
 .pin {
   padding-bottom: 10px;
+  min-width: 150px;
+}
+#your-name{
+  margin-top: 10px;
 }

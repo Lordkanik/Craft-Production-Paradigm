@@ -10,18 +10,33 @@
       integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
       crossorigin="anonymous"></script>
 		<script src="/../semantic/dist/semantic.min.js"></script>
+		<script src="/../js/brickColors.js"></script>
 		<link rel="stylesheet" type="text/css" href="/../css/builder.css">
+		<link rel="stylesheet" type="text/css" href="/../css/orderInformation.css">
+		<link rel="stylesheet" type="text/css" href="/../css/gameInfoWidget.css">
 	</head>
 	<body>
     <div>
-			<div class="ui centered grid">
-				<div class="five wide column">
-					<div class="ui buttons">
-						<button class="ui massive yellow button" id="order">Order From Customer</button>
-						<button class="ui massive green button" id="pieces">Available Pieces</button>
+		<div class="ui centered grid"  id="header-controls" style="margin: 0;">
+			<div class="left-items">
+				<div class = "stopwatch">
+					<span class="description"><strong>Press start before assembly.</strong></span>
+					<div class ="controls">
+						<button class ="start" id ="start">Start</button>
+						<button class ="stop" id ="stop">Stop</button>
+						<button class ="reset" id ="reset">Reset</button>
+					</div>
+					<div class ="display">
+						<span class="minutes" id = "min">00</span><span class ="seconds" id = "sec">00</span><span class = "centiseconds" id = "cent">00</span>
 					</div>
 				</div>
+				<div id="game-info-container"></div>
 			</div>
+			<button class="ui massive yellow button" id="order">Order From Customer</button>
+			<!-- <button class="ui massive green button" id="pieces">Available Pieces</button> -->
+
+			<button class="ui massive green button" id="controls"><i class="question circle outline icon"></i>Controls</button>
+		</div>
 			<!-- THIS IS ONLY HERE FOR TESTING. WILL BE REMOVED LATER
       <div id="models" class="ui buttons">
         <button class="ui button" onclick="getModel('oneByOne');">1x1</button>
@@ -51,12 +66,19 @@
 			<div id="header-info">
 					Powered by: <a href="http://threejs.org" target="_blank" rel="noopener">three.js</a>
 					<br>
-					<strong>shift + click</strong>: add Lego, <strong>ctrl + click</strong>: remove Lego
+				    <div class="Rules" id="rules">
+        				<span class="rule"><strong>Build from the bottom up!</strong></span>
+    				</div>
 			</div>
 		</div>
 		<!-- All the libraries I need to run the three.js stuff properly -->
-		<script src="/../js/libs/three.min.js"></script>
-		<script src="/../js/libs/loader.js"></script>
+		<script src="/../js/libs/three/build/three.min.js"></script>
+		<script src="/../js/libs/three/examples/js/loaders/STLLoader.js"></script>
+		<script src="/../js/libs/zlibjs/bin/inflate.min.js"></script>
+		<script type="text/javascript">
+			window.Inflate = Zlib.Inflate;
+		</script>
+		<script src="/../js/libs/three/examples/js/loaders/FBXLoader.js"></script>
 		<script src="/../js/libs/gltfExporter.js"></script>
 		<script src="/../js/renderers/Projector.js"></script>
 		<script src="/../js/renderers/CanvasRenderer.js"></script>
@@ -65,11 +87,18 @@
 		<script src="/../js/controls/TrackballControls.js"></script>
 		<script src="/../js/controls/Orbit.js"></script>
 
+		<!-- TinyColor color parser/manipulator -->
+		<script src="/../js/libs/tinycolor.js"></script>
+
 		<!-- My own javascript files -->
-		<script src="/../js/legoBuilder/modelProperties.js"></script>
+		<script src="/../js/gameAPI.js"></script>
+		<script src="/../js/gameInfoWidget.js"></script>
+		<script src="/../js/shared/gameObjects.js" type="module"></script>
+		<script src="/../js/partProperties.js"></script>
 		<script src="/../js/legoBuilder/pageScripts.js"></script>
 		<script src="/../js/legoBuilder/builderInitScripts.js"></script>
 		<script src="/../js/legoBuilder/builderScripts.js"></script>
+		<script src="/../js/legoBuilder/stopwatch.js"></script>
 
 		<!-- Modals for the different shit -->
 		<div class="ui basic modal" id="no-orders">
@@ -92,7 +121,7 @@
 				Order Information
 			</div>
 			<div class="image content">
-				<div class="ui medium image">
+				<div class="ui image order-image-container">
 					<img id="order-image" src="">
 				</div>
 				<div class="description">
@@ -118,7 +147,7 @@
 				</div>
 			</div>
 		</div>
-
+		<!--
 		<div class="ui basic modal" id="no-pieces">
 			<div class="ui icon header">
 				<i class="clipboard outline icon"></i>
@@ -142,6 +171,37 @@
 				<div id="supply-grid" class="ui celled grid">
 
 				</div>
+			</div>
+			<div class="actions">
+				<div class="ui black deny button">
+					Close Window
+				</div>
+			</div>
+		</div>
+		-->
+
+		<div class="ui modal" id="control-list">
+			<div class="header">
+				Controls
+			</div>
+			<div class="content">
+				<p><strong>Shift and Left Click:</strong> place lego</p>
+				<p><strong>Ctrl and Left Click:</strong> delete lego</p>
+				<p><strong>Space:</strong> recenter camera</p>
+				<p><strong>Up arrow key:</strong> move camera forward</p>
+				<p><strong>Down arrow key:</strong> move camera backward</p>
+				<p><strong>Left arrow key:</strong> move camera left</p>
+				<p><strong>Right arrow key:</strong> move camera right</p>
+				<p><strong>Left click and hold:</strong> spin camera</p>
+				<p><strong>Right click and hold:</strong> move camera right,left,forward,or backward</p>
+        			<p><strong>Scroll up:</strong> zoom camera in</p>
+    				<p><strong>Scroll down:</strong> zoom camera out</p>
+				<p><strong>W:</strong> Move lego up in the Z direction</p>
+				<p><strong>S:</strong> move lego down in the Z direction</p>
+				<p><strong>A:</strong> move lego left in the X direction</p>
+				<p><strong>D:</strong> move lego right in the X direction</p>
+    				<p><strong>Q:</strong> rotate counterclockwise 90 degrees</p>
+				<p><strong>E:</strong> rotate clockwise 90 degrees</p>
 			</div>
 			<div class="actions">
 				<div class="ui black deny button">

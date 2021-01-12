@@ -1,38 +1,19 @@
-const names = ["1x1", "2x2", "2x3x2", "1x2 Pin", 
-              "2x2 Pin", "2x2x2 Pin", "2x2 Double", "Tire 1",
-              "Tire 2", "Tire 3", "Rim 1", "Rim 2",
-              "Rim 3", "1x2", "1x4", "1x2 Plate",
-              "4x6 Plate", "6x8 Plate", "2x10 Plate", "Windshield",
-              "Steering Wheel", "Lego Man"];
-let pieceOrders = [];
 let manufacturingPieces = [];
 let orderInformation = {};
 let currentOrder = {};
-let colors = [];
 
 $(document).ready(() => {
-  generateSupplyGrid();
-  initArray();
+  $('#game-info-container').gameInfo({ positionName: 'Supplier' });
+
+  $('#supply-grid').partGrid();
+
   initButtons();
   $('#order').click(e => openModal());
   $('#request').click(e => openManufacturingModal());
   checkOrders();
 });
 
-// gets the pin from the url
-function getPin() {
-  return /(\d+)(?!.*\d)/g.exec(window.location.href)[0];
-}
-
-function initArray() {
-  for (let i = 0; i < names.length; i++) {
-    pieceOrders[i] = 0; 
-    colors[i] = '#d0d3d4';
-  }
-}
-
 function initButtons() {
-  initGridButtons();
   $('#left').click(e => {
     let index = orderInformation.indexOf(currentOrder);
     currentOrder = --index < 0 ? orderInformation[orderInformation.length - 1] : orderInformation[index];
@@ -56,59 +37,36 @@ function initButtons() {
   });
 }
 
-/**
- * Refreshes the buttons when the supply grid gets regenerated
- */
-function initGridButtons() {
-  for (let i = 0; i < names.length; i++) {
-    let num = '#' + i;
-    $(num + '-plus').click(e => {
-      let currentNum = parseInt($(num + '-value').html());
-      $(num + '-value').html(currentNum < 10 ? ++currentNum : 10);
-      pieceOrders[i] = currentNum;
-    });
-    $(num + '-minus').click(e => {
-      let currentNum = parseInt($(num + '-value').html());
-      $(num + '-value').html(currentNum == 0 ? 0 : --currentNum);
-      pieceOrders[i] = currentNum;
-    });
-
-    $('.' + i + '-picker').spectrum({
-      change: color => {
-        colors[i] = color.toHexString();;
-      }
-    });
-  }
-}
-
 // the supply order needs to match (it can have more pieces) the manufacturer order
 function checkSupplyMatchesManufacturer() {
-  for (let i = 0; i < manufacturingPieces.length; i++) {
-    if (pieceOrders[i] < manufacturingPieces[i]) return false;
+  let partCounts = $('#supply-grid').partGrid('getCounts');
+  for (let i = 0; i < currentOrder.manufacturerReq.length; i++) {
+    if (partCounts[currentOrder.manufacturerReq[i].partID] < currentOrder.manufacturerReq[i].count) return false;
   }
   return true;
 }
 
 function sendSupplyOrder() {
-  let postData = {
-    "id": currentOrder._id,
-    "order": pieceOrders,
-    "colors": colors
-  }
+  let orderData = [],
+      partCounts = $('#supply-grid').partGrid('getCounts'),
+      partColors = $('#supply-grid').partGrid('getColors');
 
-  $.ajax({
-    type: 'POST',
-    data: postData,
-    url: 'https://psu-research-api.herokuapp.com/gameLogic/sendSupplyOrder/' + getPin(),
-    success: (data) => {
-      console.log('Order sent!');
-      $('#ready-order').modal('toggle');
-      generateSupplyGrid();
-      initGridButtons();
-    },
-    error: (xhr, status, error) => {
-      console.log(error);
+  Object.keys(partCounts).map(value => parseInt(value)).forEach((thisPartID) => {
+    if(partCounts[thisPartID] > 0) {
+      orderData.push({
+        partID: thisPartID,
+        color: partColors[thisPartID],
+        count: partCounts[thisPartID],
+      });
     }
+  });
+
+  GameAPI.sendSupplyOrder(currentOrder._id, orderData).then((data) => {
+    console.log('Order sent!');
+    $('#ready-order').modal('toggle');
+    $('#supply-grid').partGrid('reset');
+  }).catch((xhr, status, error) => {
+    console.log(error);
   });
 }
 
@@ -116,41 +74,41 @@ function sendSupplyOrder() {
  * Function that runs constantly to update the orders
  */
 function checkOrders() {
-  $.ajax({
-    type: 'GET',
-    url: 'https://psu-research-api.herokuapp.com/gameLogic/getOrders/' + getPin(),
-    cache: false,
-    timeout: 5000,
-    success: (data) => {
-      orderInformation = data;
-      removeOrdersAtManuf(orderInformation);
-      // Need to find the oldest order that hasn't been finished or canceled
-      let i = 0;
-      if (orderInformation.length != 0) {
-        while(orderInformation[i].status != 'In Progress') {
-          i++;
-          if (i >= orderInformation.length) break;
-        } 
-        currentOrder = orderInformation[i] === undefined ? orderInformation[0] : orderInformation[i];
-      }
-      updateOrder();
-    },
-    error: (xhr, status, error) => {
-      console.log('Error: ' + error);
-    }
+  GameAPI.getSupplyOrders().then((data) => {
+    orderInformation = filterOrders(data);
+    updateCurrentOrderInfo();
+    updateOrder();
+  }).catch((xhr, status, error) => {
+    console.log('Error: ' + error);
   });
 
-  checkRequestedPieces();
+  // checkRequestedPieces();
   setTimeout(checkOrders, 3000);
 }
 
-function removeOrdersAtManuf(orders) {
-  orders.forEach((elem, i) => {
-    // don't want other stages to see orders when it is at manufacturer
-    if (elem.stage == "Manufacturer")
-      orders.splice(i, 1);
-  });
-  return orders;
+function filterOrders(orders) {
+  return (orders.filter((elem) => {
+    return (elem.status === "In Progress");
+  }));
+}
+
+function updateCurrentOrderInfo()
+{
+  if(orderInformation.length === 0)
+  {
+    currentOrder = null;
+  }
+  else {
+    if (currentOrder != null && !(jQuery.isEmptyObject(currentOrder))) {
+      let findObj = orderInformation.find((elem) => {
+        return elem._id === currentOrder._id;
+      });
+
+      currentOrder = (findObj ? findObj : orderInformation[0]);
+    } else {
+      currentOrder = orderInformation[0];
+    }
+  }
 }
 
 /**
@@ -167,10 +125,10 @@ function openManufacturingModal() {
     $('#ready-request').modal('toggle');
 }
 
-function checkRequestedPieces() {
+/*function checkRequestedPieces() {
   $.ajax({
   type: 'GET',
-  url: 'https://psu-research-api.herokuapp.com/gameLogic/getManufacturerRequest/' + getPin() + '/' + currentOrder._id,
+  url: GameAPI.rootURL + '/gameLogic/getManufacturerRequest/' + getPin() + '/' + currentOrder._id,
   success: (data) => {
     if (data.length != 0) {
       manufacturingPieces = data;
@@ -191,7 +149,7 @@ function populateRequestData(data) {
     }
   });
   $('#requested-pieces').html(html);
-}
+}*/
 
  function openModal() {
   if (jQuery.isEmptyObject(orderInformation)) {
@@ -203,48 +161,17 @@ function populateRequestData(data) {
 }
 
 function updateOrder() {
-  switch(currentOrder.modelType) {
-    case 'super': $('#order-image').attr('src', '/../images/race.jpg');        break;
-    case 'race': $('#order-image').attr('src', '/../images/lego_car.jpg');     break;
-    case 'RC': $('#order-image').attr('src', '/../images/rc.jpg');             break;
-    case 'yellow': $('#order-image').attr('src', '/../images/yellow_car.jpg'); break;
-  }
-  let html = '<p>Date Ordered: ' + new Date(currentOrder.createDate).toString() + '</p>';
-  html += '<p>Last Modified: ' + new Date(currentOrder.lastModified).toString() + '</p>';
-  if (currentOrder.status === 'Completed')
-    html += '<p>Finished: ' + new Date(currentOrder.finishedTime).toString() + '</p>';
-  html += '<p>Model Type: ' + currentOrder.modelType + '</p>';
-  html += '<p>Stage: ' + currentOrder.stage + '</p>';
-  html += '<p>Status: ' + currentOrder.status + '</p><br>';
-  $('#order-info').html(html);
-}
+  let orderNode = $('#order-info').empty();
 
-/**
- * Dynamically generate all the squares to add to a supply order
- * This would have been terrible to do by hand
- */
-function generateSupplyGrid() {
-  let html = "";
-  for (let i = 0; i < names.length / 4; i++) {
-    html += '<div class="row">';
-    for (let j = 0; j < 4; j++) {
-      if (i * 4 + j < names.length) {
-        html += '<div class="four wide column">';
-        html += '<p>' + names[i * 4 + j] + '</p>';
-        // Start off each piece with an order of 0
-        html += '<div class="row"><div class="ui statistic"><div id="' + (i * 4 + j) + '-value' + '"class="value">0</div></div></div>'
-        // add a color picker to each item
-        html += '<div class="row picker"><input type="text" class="' + (i * 4 + j) + '-picker" value="#d0d3d4"/></div>'
-        // Adds the plus and minus buttons to each piece
-        html += '<div class="row"><div class="ui icon buttons">' +
-          '<button id="'+ (i * 4 + j) + '-minus' + '" class="ui button"><i class="minus icon"></i></button>' +
-          '<button id="'+ (i * 4 + j) + '-plus' + '" class="ui button"><i class="plus icon"></i></button></div></div></div>';
-      }
-    }
-    // I want there to be vertical lines between each cube so I need to add a blank space 
-    if (i + 1 >= names.length / 4) html += '<div class="five wide column"></div>';
-    html += '</div>';
-  }
+  orderNode.append($('<p></p>').text('Ordered by: ' + (currentOrder.createdBy ? currentOrder.createdBy : '<Anonymous Player>')))
+      .append('<p>Date Ordered: ' + new Date(currentOrder.createDate).toString() + '</p>')
+      .append('<p>Last Modified: ' + new Date(currentOrder.lastModified).toString() + '</p>')
+      .append('<p>Status: ' + currentOrder.status + '</p>')
+      .append('<p>Requested Parts:</p>');
 
-  $('#supply-grid').html(html);
+  currentOrder.manufacturerReq.forEach(value => {
+    orderNode.append(`<p>${value.count} ${partProperties.PARTS[value.partID].name} (${BrickColors.findByColorID(value.color).colorName} (${value.color}))</p>`);
+  });
+
+  orderNode.append('<br>');
 }

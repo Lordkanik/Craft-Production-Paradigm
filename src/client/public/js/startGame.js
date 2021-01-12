@@ -1,10 +1,11 @@
 let pin = -1;
-let maxPlayers = -1;
+let currentGameInfo = null;
 
 $(document).ready(() => {
   initPage();
   initProgressAndButtons();
-  getGameInfo();
+  updateGameInfo();
+  setInterval(updateGameInfo, 3000);
 });
 
 /* 
@@ -15,19 +16,14 @@ function closingCode() {
   $.ajax({
     type: 'GET',
     timeout: 5000,
-    url: 'https://psu-research-api.herokuapp.com/startGame/removeActivePlayer/' + pin,
+    url: 'http://psu-research-api:3000/startGame/removeActivePlayer/' + pin,
     error: (error) => console.log(error)
   });
   return "Are you sure you want to close?";
 }*/
 
-// gets the pin from the url
-function getPin() {
-  return /(\d+)(?!.*\d)/g.exec(window.location.href)[0];
-}
-
 function initPage() {
-  pin = getPin();
+  pin = GameAPI.getPin();
   $('#pin').html(Number(pin).pad(4));
 }
 
@@ -39,43 +35,27 @@ function initProgressAndButtons() {
     }
   });
 
-  $('#start-game').click((e) => {
-    let location = '/';
-    switch(sessionStorage.position) {
-      case 'Assembler':    location = '/builder/' + pin;      break;
-      case 'Customer':     location = '/customer/' + pin;     break;
-      case 'Supplier':     location = '/supplier/' + pin;     break;
-      case 'Manufacturer': location = '/manufacturer/' + pin; break;
-    }
-    window.location.href = location;
+  $('#start-game').click(() => {
+    let gameTypeInfo = GameObjects.GameTypes[Object.keys(GameObjects.GameTypes)
+        .find(typeKey => GameObjects.GameTypes[typeKey].name === currentGameInfo.gameType)];
+    let positionInfo = gameTypeInfo.positions[Object.keys(gameTypeInfo.positions)
+        .find(typeKey => gameTypeInfo.positions[typeKey].name === sessionStorage.position)];
+
+    window.location.href = positionInfo.getURL(pin);
   });
 
-  $('#exit').click((e) => {
-    $.ajax({
-      type: 'GET',
-      timeout: 5000,
-      url: 'https://psu-research-api.herokuapp.com/startGame/removeActivePlayer/' + pin + '/' + sessionStorage.position,
-      success: (result) => window.location.href = '/',
-      error: (error) => console.log(error)
-    });
+  $('#exit').click(() => {
+    GameAPI.removeActivePlayer().then(() => window.location.href = '/').catch((error) => console.log(error));
   });
 }
 
-
-function getGameInfo() {
-  $.ajax({
-    type: 'GET',
-    url: 'https://psu-research-api.herokuapp.com/startGame/getGameInfo/' + pin,
-    timeout: 5000,
-    success: (result) => {
-      applyGameInfo(result[0]);
-      setTimeout(getGameInfo, 5000);
-      if (result[0].activePlayers == result[0].maxPlayers)
-        $('#start-game').removeClass('disabled');
-    },
-    error: (xhr,status,error) => {
-      console.log(error);
-    }
+function updateGameInfo()
+{
+  return GameAPI.getGameInfo().then((data) => {
+    currentGameInfo = data;
+    applyGameInfo(data);
+    if (data.activePlayers === data.maxPlayers)
+      $('#start-game').removeClass('disabled');
   });
 }
 
@@ -85,14 +65,16 @@ function getGameInfo() {
  */
 function applyGameInfo(result) {
   try {
-    let title = 'Group Name: ';
-    let gameType = 'Game Type: ';
-    $('#name').html(title + result.groupName);
-    $('#game-type').html(gameType + result.gameType);
-    $('#players').html(result.activePlayers);
-    $('#example4').attr('data-total', result.maxPlayers);
-    $('#example4').progress('set total', result.maxPlayers);
-    $('#example4').progress('update progress', result.activePlayers);
+    let title = 'Group: ';
+    let gameType = 'Game: ';
+    let playerNamePrefix = 'Player: ';
+    $('#name').text(title + result.groupName);
+    $('#game-type').text(gameType + result.gameType);
+    $('#player-name').text(playerNamePrefix + result.positions.find(value => (value.positionName === sessionStorage.position)).playerName);
+    $('#players').text(result.activePlayers);
+    $('#example4').attr('data-total', result.maxPlayers)
+      .progress('set total', result.maxPlayers)
+      .progress('update progress', result.activePlayers);
   } catch (e) {
     console.log('You may need to wait a second');
     console.log(e);
@@ -106,4 +88,4 @@ Number.prototype.pad = function(size) {
   var s = String(this);
   while (s.length < (size || 2)) {s = "0" + s;}
   return s;
-}
+};

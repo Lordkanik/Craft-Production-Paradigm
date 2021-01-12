@@ -1,3 +1,17 @@
+import {OrderImage} from './orderImage';
+
+class CustomOrderInfo
+{
+  public orderDesc: string;
+  public orderImage: OrderImage;
+
+  constructor(desc: string, image: OrderImage)
+  {
+    this.orderDesc = desc;
+    this.orderImage = image;
+  }
+}
+
 export default class Order {
   private _id: string;
   private pin: number;
@@ -12,7 +26,8 @@ export default class Order {
   // 4 Stages of Production
   // Customer -> Manufacturer -> Supplier -> Assembler -> Customer
   private stage: string;
-  private modelType: string;
+  private modelID: number;
+  private customOrderInfo: (CustomOrderInfo | null) = null;
   private manufacturerReq: Array<number>;
   private supplyOrders: Array<number>;
   private assembledModel: object;
@@ -23,7 +38,7 @@ export default class Order {
     this.createDate = new Date().getTime();
     this.status = "In Progress";
     this.stage = "Manufacturer";
-    this.modelType = '';
+    this.modelID = -1;
     this.lastModified = this.createDate;
     this.finishedTime = -1;
     this.manufacturerReq = new Array<number>();
@@ -62,13 +77,20 @@ export default class Order {
     this.stage = stage;
   }
 
-  public setModelType(type: string): void {
+  public setModelID(type: number): void {
     this.setLastModified();
-    this.modelType = type;
+    this.modelID = type;
+    this.customOrderInfo = null;
+  }
+
+  public setCustomOrder(desc: string, image: OrderImage)
+  {
+    this.setLastModified();
+    this.customOrderInfo = new CustomOrderInfo(desc, image);
   }
 
   // Allows me to easily convert the object and store it into the mongoDB database
-  public toJSON(): object {
+  public async toJSON(): Promise<object> {
     let jsonObj = {
       "_id": this._id,
       "pin": this.pin,
@@ -77,7 +99,10 @@ export default class Order {
       "finishedTime": this.finishedTime,
       "status": this.status,
       "stage": this.stage,
-      "modelType": this.modelType,
+      "modelID": this.modelID,
+      "isCustomOrder": (!!this.customOrderInfo),
+      "orderDesc": (this.customOrderInfo ? this.customOrderInfo.orderDesc : null),
+      "imageData": (this.customOrderInfo ? await this.customOrderInfo.orderImage.toBuffer() : null),
       "manufacturerReq": this.manufacturerReq,
       "supplyOrders": this.supplyOrders,
       "colors": this.colors,

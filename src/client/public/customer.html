@@ -1,123 +1,172 @@
-<!DOCTYPE html>
-<html>
-  <head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-		<title>Customer - Manufacturing Simulation</title>
+<html><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <title>Customer - Manufacturing Simulation</title>
     <link rel="stylesheet" type="text/css" href="/../semantic/dist/semantic.min.css">
     <link rel="stylesheet" type="text/css" href="/../css/customer.css">
-    <script
-      src="https://code.jquery.com/jquery-3.1.1.min.js"
-      integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
-      crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="/../css/orderInformation.css">
+    <link rel="stylesheet" type="text/css" href="/../css/gameInfoWidget.css">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
     <script src="/../semantic/dist/semantic.min.js"></script>
+    <script src="/../js/gameAPI.js"></script>
+    <script src="/../js/gameInfoWidget.js"></script>
     <script src="/../js/customer.js"></script>
-  </head>
-  <body>
-    <div class="ui centered grid" id="header">
-      <div class="nine wide column">
+</head>
+<body class="dimmable">
+<div class="ui centered grid" id="header">
+    <div class="nine wide column">
         <div class="ui centered grid">
-          <div class="row">
-            <h1 class="ui header">
-              <i class="credit card outline icon"></i>
-              Customer
-            </h1>
-          </div>
-          <div class="row">
-            <h3 class="ui header">Generate Orders By Guassian Distribution</h3>
-          </div>
-          <div class="row">
-            <div class="ui input left icon labeled">
-              <input id="num-orders" placeholder="# of Orders" type="number" min="1" max="10">
-              <i class="cart plus icon"></i>
-            </div>
-            <div class="ui input left icon labeled">
-              <input id="skew" placeholder="Skew" type="number" min="0">
-              <i class="chart area icon"></i>
-            </div>
-            <button class="ui green button" id="generate">Generate</button>
-          </div>
-          <div class="row">
-            <div class="ui horizontal divider">OR</div>
-          </div>
-          <div class="row">
-            <h3 class="ui header">Pick a model to order</h3>
-          </div>
-          <div class="ui celled grid">
             <div class="row">
-              <div class="eight wide column">
-                <img id="1" src="/../images/race.jpg"/>
-              </div>
-              <div class="eight wide column">
-                <img id="2" src="/../images/lego_car.jpg"/>
-              </div>
+                <div class="ui centered grid">
+                    <div class="row">
+                        <h1 class="ui header">
+                            <i class="credit card outline icon"></i>
+                            Customer
+                        </h1>
+                    </div>
+                    <div class="row">
+                        <button class="ui massive green button" id="order">View Orders Placed</button>
+                    </div>
+                    <div id="game-info-container"></div>
+                </div>
+            </div>
+            <div class="ui divider" style="width: 100%;"></div>
+            <div class="row">
+                <button class="ui green button" id="generate">Generate Random Order</button>
             </div>
             <div class="row">
-              <div class="eight wide column">
-                <img id="3" src="/../images/rc.jpg"/>
-              </div>
-              <div class="eight wide column">
-                <img id="4" src="/../images/yellow_car.jpg"/>
-              </div>
+                <div class="ui horizontal divider">OR</div>
             </div>
-          </div>
-					<button class="disabled ui massive green button" id="order">View Orders Placed</button>
+            <div class="row">
+                <h3 class="ui header">Pick a model to order</h3>
+            </div>
+            <div class="ui celled grid">
+                <div class="row">
+                    <div class="eight wide column">
+                        <img id="1" src="/../images/Option 1.PNG">
+                    </div>
+                    <div class="eight wide column">
+                        <img id="2" src="/../images/Option 2.PNG">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="eight wide column">
+                        <img id="3" src="/../images/Option 3.PNG">
+                    </div>
+                    <div class="eight wide column">
+                        <img id="4" src="/../images/Option 4.PNG">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="ui horizontal divider">OR</div>
+            </div>
+            <div class="row">
+                <h3 class="ui header">Create a custom order</h3>
+            </div>
+            <div class="row">
+                <form id="custom-order-form" action="https://manufacturing-sim-game-api.herokuapp.com/sendOrder" method="post" enctype="multipart/form-data" style="width: 100%;">
+                    <div class="ui celled centered grid image-picker grid">
+                        <span class="row" style="margin-bottom: 5px;">Select an image that depicts the product:</span>
+                        <p>
+                            <button type="button" id="file-button">
+                                CHOOSE A FILE
+                                <input type="file" name="custom-order-image" id="real-file" required="" style="top: 82.4px; left: 334.336px;">
+                            </button>
+                            <span id="custom-text">No file chosen.</span>
+                        </p>
+                    </div>
+                    <textarea name="custom-order-desc" placeholder="Add notes about this item..." style="width: 100%; height: 100px; margin-bottom: 5px"></textarea>
+                    <button type="submit" id="custom-order-submit" name="custom-order-submit" class="ui large green button">Send Order</button>
+                </form>
+            </div>
         </div>
-      </div>
     </div>
+</div>
 
-    <div class="ui basic modal">
-      <div class="ui icon header">
+<div class="ui basic modal" id="confirm-standard-order-modal">
+    <div class="ui icon header">
         <i class="cart arrow down icon"></i>
         Send Order to Manufacturer
-      </div>
-      <div class="ui centered grid">
+    </div>
+    <div class="ui centered grid">
         <div class="content">
-          <p>Would you like to send your order of the <span id="car-type"></span> car to the manufacturer to be built?</p>
+            <p>Would you like to send your order of car type <span id="car-type"></span> to the manufacturer to be built?</p>
         </div>
         <div class="row">
-          <div class="actions">
-            <div class="ui red basic cancel inverted button">
-              <i class="remove icon"></i>
-              No
+            <div class="actions">
+                <div class="ui red basic cancel inverted button">
+                    <i class="remove icon"></i>
+                    No
+                </div>
+                <div class="ui green ok inverted button">
+                    <i class="checkmark icon"></i>
+                    Yes
+                </div>
             </div>
-            <div class="ui green ok inverted button">
-              <i class="checkmark icon"></i>
-              Yes
-            </div>
-          </div>
         </div>
-      </div>
     </div>
+</div>
 
-    <div class="ui modal" id="ready-order">
-			<div class="header">
-				Order Information
-			</div>
-			<div class="image content">
-				<div class="ui medium image">
-					<img id="order-image" src="">
-				</div>
-				<div class="description">
-					<div class="ui header">Orders Sent</div>
-					<span id="order-info"></span>
-				</div>
-			</div>
-			<div class="actions">
-				<div id="left" class="ui red button">
-					<i class="angle double left icon"></i>
-				</div>
-				<div id="right" class="ui red button">
-					<i class="angle double right icon"></i>
-				</div>
-				<div class="ui black deny button">
-					Close Window
-				</div>
-				<div id="view-model" class="ui disabled positive right labeled icon button">
-					View Model
-					<i class="checkmark icon"></i>
-				</div>
-			</div>
-		</div>
-  </body>
-</html>
+
+
+<div class="ui basic modal" id="order-success-modal">
+    <div class="ui centered header">
+        The order was sent successfully!
+    </div>
+    <div class="ui centered grid">
+        <div class="actions">
+            <div class="ui green inverted button modal-close-button">
+                <i class="checkmark icon"></i>
+                Okay
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="ui dimmer modals page transition hidden"><div class="ui modal transition hidden" id="ready-order">
+    <div class="header">
+        <span id="order-info-text">Order Information</span>
+        <div class="header-lr-filler"></div>
+        <div id="filter-options">
+            <span id="filter-options-text">Filter orders:</span>
+            <input id="in-progress" type="checkbox">
+            <label for="in-progress">In progress</label>
+            <input id="ready-for-inspection" type="checkbox" checked="">
+            <label for="ready-for-inspection">Ready for inspection</label>
+            <input id="sent-to-customer" type="checkbox">
+            <label for="sent-to-customer">Sent to customer</label>
+        </div>
+    </div>
+    <div id="order-display" class="image content" style="display: none;">
+        <div class="ui image order-image-container">
+            <img id="order-image" src="">
+        </div>
+        <div class="description">
+            <div class="ui header">Orders Sent</div>
+            <span id="order-info"></span>
+        </div>
+    </div>
+    <div id="no-order-message" class="ui negative message">
+        <div class="ui centered header">
+            No Orders Available
+        </div>
+        <p style="text-align: center;">No orders are available that match the selected filters.</p>
+    </div>
+    <div class="actions">
+        <div id="left" class="ui red button disabled">
+            <i class="angle double left icon"></i>
+        </div>
+        <div id="right" class="ui red button disabled">
+            <i class="angle double right icon"></i>
+        </div>
+        <div class="ui black deny button">
+            Close Window
+        </div>
+        <div id="view-model" class="ui disabled positive right labeled icon button">
+            View Model
+            <i class="checkmark icon"></i>
+        </div>
+    </div>
+</div></div></body></html>

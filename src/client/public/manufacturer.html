@@ -5,27 +5,60 @@
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 		<title>Manufacturer - Manufacturing Simulation</title>
 		<link rel="stylesheet" type="text/css" href="/../semantic/dist/semantic.min.css">
+	    <link rel='stylesheet' type="text/css" href='/../spectrum/spectrum.css'/>
 		<link rel="stylesheet" type="text/css" href="/../css/supplier.css">
+	  	<link rel="stylesheet" type="text/css" href="/../css/orderInformation.css">
+	  	<link rel="stylesheet" type="text/css" href="/../css/gameInfoWidget.css">
     <script
       src="https://code.jquery.com/jquery-3.1.1.min.js"
       integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
       crossorigin="anonymous"></script>
     <script src="/../semantic/dist/semantic.min.js"></script>
-		<script src="/../js/manufacturer.js"></script>
+	<script src='/../spectrum/spectrum.js'></script>
+	<script src="/../js/gameAPI.js"></script>
+    <script src="/../js/gameInfoWidget.js"></script>
+    <script src="/../js/shared/gameObjects.js" type="module"></script>
+	<script src="/../js/partProperties.js"></script>
+	<script src="/../js/brickColors.js"></script>
+    <script src="/../js/partGridWidget.js"></script>
+	<script src="/../js/manufacturer.js"></script>
   </head>
   <body>
     <div class="ui centered grid">
       <div class="nine wide column">
         <div class="ui centered grid">
           <div class="row">
-            <h1 id="header" class="ui header">
-              <i class="industry icon"></i>
-              Manufacturer
-            </h1>
-          </div>
-					<button class="ui massive yellow button" id="order">Orders From Customer</button>
-          <div id="supply-grid" class="ui celled grid">
+			<div class="ui centered grid">
+			  <div class="row">
+				<h1 id="header" class="ui header">
+				  <i class="industry icon"></i>
+				  Manufacturer
+				</h1>
+			  </div>
+			  <div class="row">
+				<button class="ui large yellow button" id="order">Orders From Customer</button>
+				<button class="ui large disabled green button" id="send-supplier-order">Send Supplier Order</button>
+			  </div>
+				<div id="game-info-container"></div>
+				<div class="total-cost-weight">
+					<div class="ui celled centered grid total-cost-weight-grid">
+						<div class="row total-cost">
+							<div class="ui centered grid total-cost-grid">
+								<p>Total Cost:</p>
+								<p id="total-cost-text">$XX.XX</p>
+							</div>
+						</div>
+						<div class="row total-weight">
+							<div class="ui centered grid total-weight-grid">
+								<p>Total Weight (g):</p>
+								<p id="total-weight-text">XX</p>
+							</div>
+						</div>
 					</div>
+				</div>
+		    </div>
+		  </div>
+          <div id="supply-grid"></div>
         </div>
       </div>
     </div>
@@ -45,12 +78,27 @@
 			</div>
 		</div>
 
+	<div class="ui basic modal" id="supply-order-sent">
+		<div class="ui icon header">
+			<i class="clipboard outline icon"></i>
+			The supplier order was sent successfully!
+		</div>
+		<div class="ui centered grid">
+			<div class="actions">
+				<div class="ui green ok inverted button">
+					<i class="checkmark icon"></i>
+					Okay
+				</div>
+			</div>
+		</div>
+	</div>
+
 		<div class="ui modal" id="ready-order">
 			<div class="header">
 				Order Information
 			</div>
 			<div class="image content">
-				<div class="ui medium image">
+				<div class="ui image order-image-container">
 					<img id="order-image" src="">
 				</div>
 				<div class="description">
@@ -59,6 +107,14 @@
 					<p>I hope you know which pieces are needed.</p>
 				</div>
 			</div>
+			<!--
+			<div class="ui negative message" id="error-message">
+				<div class="ui centered header">
+					No Parts Selected
+				</div>
+				<p style="text-align: center;">Please select parts to send a part order.</p>
+			</div>
+			-->
 			<div class="actions">
 				<div id="left" class="ui red button">
 					<i class="angle double left icon"></i>
@@ -70,7 +126,7 @@
 					Close Window
 				</div>
 				<div id="send-manufacturing-order" class="ui positive right labeled icon button">
-					Send Parts Order To Supplier
+					Forward Order to Assembler
 					<i class="checkmark icon"></i>
 				</div>
 			</div>

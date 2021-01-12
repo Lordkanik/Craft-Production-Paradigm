@@ -1,3 +1,3 @@
 /* app/routes/index.ts */
-export {StartGameRouter} from './startGame.router';
-export {GameLogicRouter} from './gameLogic.router';
+export {createRoutes as createGameRoutes} from './startGame.router';
+export {createRoutes as createGameLogicRoutes} from './gameLogic.router';

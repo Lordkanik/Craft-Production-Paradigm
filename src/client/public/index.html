@@ -1,150 +1,140 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
-  <head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-		<title>Manufacturing Simulation</title>
-    <link rel="stylesheet" type="text/css" href="semantic/dist/semantic.min.css">
-    <script
-      src="https://code.jquery.com/jquery-3.1.1.min.js"
-      integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
-      crossorigin="anonymous"></script>
-    <script src="semantic/dist/semantic.min.js"></script>
-    <script src="js/welcome.js"></script>
-    <link rel="stylesheet" type="text/css" href="css/startPage.css">
-	</head>
-	<body>
-    <div class="top">
-      <div class="ui grid container">
-        <div class="ui centered vertically divided grid">
-          <div class="row twelve wide column">
-            <h1 class="ui header">Welcome To The Manufacturing Simulation</h1>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+  <title>Manufacturing Simulation</title>
+  <link rel="stylesheet" type="text/css" href="semantic/dist/semantic.min.css">
+  <script
+          src="https://code.jquery.com/jquery-3.1.1.min.js"
+          integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+          crossorigin="anonymous"></script>
+  <script src="semantic/dist/semantic.min.js"></script>
+  <script src="js/shared/gameObjects.js" type="module"></script>
+  <script src="js/gameAPI.js"></script>
+  <script src="js/welcome.js"></script>
+  <link rel="stylesheet" type="text/css" href="css/startPage.css">
+</head>
+<body>
+<div class="top">
+  <div class="ui grid container">
+    <div class="ui centered vertically divided grid">
+      <div class="row twelve wide column">
+        <h1 class="ui header">Welcome To The Manufacturing Simulation</h1>
+      </div>
+      <div class="row twelve wide column">
+        <h2 class="ui header">What is this?</h2>
+        <p class="sixteen wide column">
+          This is an online manufacturing simulation developed by Daniel Kovalevich, Zachary Gabel, Saaman Khalilollahi overseen by Dr. Faisal Aqlan,
+          and Dr. Hui Yang, from Penn State University. The objective of the program is to use car toys for teaching the basics of Lean manufacturing.
+          Simulations can be practical teaching aids that help students understand real industrial practices
+          and provide a space for application of theories and ideas learned in the classroom.
+        </p>
+      </div>
+      <div class="row twelve wide column">
+        <h2 class="ui header">How does the game work?</h2>
+        <p class="sixteen wide column">
+          The game is currently a simplified version of the craft production paradigm. One person must start the game and
+          there must be three others to play along. Once the first user starts the game, the server will generate a pin
+          for the others to use to join the game. As a player, you will be able to chose one of four positions: Customer,
+          Manufacturer, Supplier, and Assembler. As the customer, you will be placing orders and inspecting the models that come
+          back. As the manufacturer, you decide what kinds of pieces will be required for the customer order. The supplier
+          is very similar to the manufacturer but can also account for extra pieces and the supplier order is sent to the
+          assembler. The assembler puts the model together in 3D space inside the THREE.js viewing engine. Once they finish
+          the assembling, the model goes back to the customer for viewing.
+        </p>
+      </div>
+      <div class="row twelve wide column">
+        <div class="eight wide center aligned column">
+          <h3 class="ui center aligned header">Start a new game</h3>
+          <div id="new-game" class="ui big blue labeled icon button">
+            <i class="signup icon"></i>
+            New Game
           </div>
-          <div class="row twelve wide column">
-            <h2 class="ui header">What is this?</h2>
-            <p class="sixteen wide column">
-              This is an online manufacturing simulation developed by Daniel Kovalevich, overseen by Dr. Faisal Aqlan,
-              and paid for by Penn State University. The objective of the program is to emulate the physcial manufacturing
-              simulation developed by Dr. Aqlan that utilizes legos to teach others about the different processes. 
-              Simulations can be practical teaching aids that help students understand real industrial practices 
-              and provide a space for application of theories and ideas learned in the classroom.
-            </p>
+        </div>
+        <div class="ui vertical divider">
+          Or
+        </div>
+        <div class="eight wide center aligned column">
+          <h3 class="ui center aligned header">Join a current game</h3>
+          <div id="join-game" class="ui big green labeled icon button">
+            <i class="signup icon"></i>
+            Join Game
           </div>
-          <div class="row twelve wide column">
-            <h2 class="ui header">How does the game work?</h2>
-            <p class="sixteen wide column">
-              The game is currently a simplified verison of the craft production paradigm. One person must start the game and
-              there must be three others to play along. Once the first user starts the game, the server will generate a pin
-              for the others to use to join the game. As a player, you will be able to chose one of four positions: Customer,
-              Manufacturer, Supplier, and Assembler. As the customer, you will be placing orders and inspecting the models that come
-              back. As the manufacturer, you decide what kinds of pieces will be required for the customer order. The supplier 
-              is very similar to the manufacturer but can also account for extra pieces and the supplier order is sent to the
-              assembler. The assembler puts the model together in 3D space inside the THREE.js viewing engine. Once they finish
-              the assembling, the model goes back to the customer for viewing. 
-            </p>
-          </div>
-          <div class="row twelve wide column">
-            <div class="eight wide center aligned column">
-              <h3 class="ui center aligned header">Start a new game</h3>
-              <div id="new-game" class="ui big blue labeled icon button">
-                <i class="signup icon"></i>
-                New Game
-              </div>
-            </div>
-            <div class="ui vertical divider">
-                Or
-              </div>
-            <div class="eight wide center aligned column">
-              <h3 class="ui center aligned header">Join a current game</h3>
-              <div id="join-game" class="ui big green labeled icon button">
-                <i class="signup icon"></i>
-                Join Game
-              </div>
-            </div>
-          </div>
-          <div class="row twelve wide column"></div>
         </div>
       </div>
-    </div>
-  </body>
-
-  <div id="new-game-modal" class="ui tiny modal">
-    <div class="header">Start A New Game</div>
-    <div id="new-game-form" class="ui centered grid">
-      <form class="ui form">
-        <div class="one field">
-          <div class="field">
-            <label>Game Info</label>
-            <input id="group-name" placeholder="Group Name" name="name" type="text">
-          </div>
-        </div>
-        <div class="field">
-          <div class="ui input left icon labeled">
-            <input id="num-players" placeholder="Players" type="number" min="2" max="4">
-            <i class="users icon"></i>
-          </div>
-        </div>
-        <div class="field">
-          <div class="ui selection dropdown">
-            <input type="hidden" name="game-type">
-            <i class="dropdown icon"></i>
-            <div class="default text" id="game-type">Game Type</div>
-            <div class="menu">
-              <div class="item" data-value="0">Craft Production</div>
-            </div>
-          </div>
-        </div>
-        <div class="ui selection dropdown" id="position-dropdown">
-          <input type="hidden" name="positions">
-          <i class="dropdown icon"></i>
-          <div class="default text" id="position-type">Position Type</div>
-          <div class="menu">
-            <div class="item" data-value="Customer">Customer</div>
-            <div class="item" data-value="Manufacturer">Manufacturer</div>
-            <div class="item" data-value="Supplier">Supplier</div>
-            <div class="item" data-value="Assembler">Assembler</div>
-          </div>
-        </div>
-        <div class="ui error message"></div>
-      </form>
-    </div>
-    <div class="actions">
-      <div id="cancel" class="ui black deny button">
-        Cancel
-      </div>
-      <div id="start-game-submit" class="ui positive right labeled icon button">
-        Get Started
-        <i class="checkmark icon"></i>
-      </div>
+      <div class="row twelve wide column"></div>
     </div>
   </div>
+</div>
+</body>
 
-  <div id="join-game-modal" class="ui mini modal">
-    <div class="header">Join Game</div>
-    <div id="pin-grid" class="ui centered grid">
-      <div class="ui input labeled pin">
-        <input id="pin" placeholder="Pin" type="number">
-      </div>
-      <div class="row">
-        <div id="join-dropdown" class="ui disabled selection dropdown">
-          <input type="hidden" name="positions">
-          <i class="dropdown icon"></i>
-          <div class="default text" id="position-type">Position Type</div>
-          <div class="menu" id="join-menu">
-          </div>
+<div id="new-game-modal" class="ui tiny modal">
+  <div class="header">Start A New Game</div>
+  <div id="new-game-form" class="ui centered grid">
+    <form class="ui form">
+      <div class="one field">
+        <div class="field">
+          <label>Game Info</label>
+          <input id="group-name" placeholder="Group Name" name="name" type="text">
         </div>
       </div>
+      <div class="field">
+        <select id="game-type-dropdown"></select>
+      </div>
+      <div class="field">
+        <select id="position-dropdown"></select>
+      </div>
+      <div class="one field">
+        <div class="field">
+          <input id="your-name" placeholder="Your Name" name="name" type="text">
+        </div>
+      </div>
+      <div class="ui error message"></div>
+    </form>
+  </div>
+  <div class="actions">
+    <div id="cancel" class="ui black deny button">
+      Cancel
+    </div>
+    <div id="start-game-submit" class="ui positive right labeled icon button">
+      Get Started
+      <i class="checkmark icon"></i>
+    </div>
+  </div>
+</div>
+
+<div id="join-game-modal" class="ui mini modal">
+  <div class="header">Join Game</div>
+  <div id="pin-grid" class="ui centered grid">
+    <div class="ui input labeled pin">
+      <input id="pin" placeholder="Pin" type="number" min="0" max="9999">
+    </div>
+    <div class="row">
+      <div id="join-dropdown" class="ui disabled selection dropdown">
+        <input type="hidden" name="positions">
+        <i class="dropdown icon"></i>
+        <div class="default text" id="position-type">Position Type</div>
+        <div class="menu" id="join-menu">
+        </div>
+      </div>
+    </div>
+    <div class="ui disabled input labeled join-player-name-container">
+      <input id="join-player-name" placeholder="Your Name" name="join-player-name" type="text">
+    </div>
+    <div class="row">
       <div class="ui hidden error message invalid-pin">That is not a valid pin!</div>
     </div>
-    <div class="actions">
-      <div class="ui black deny button">
-        Cancel
-      </div>
-      <div id="join-game-submit" class="ui positive right labeled icon button">
-        Get Started
-        <i class="checkmark icon"></i>
-      </div>
+  </div>
+  <div class="actions">
+    <div class="ui black deny button">
+      Cancel
+    </div>
+    <div id="join-game-submit" class="ui positive right labeled icon button">
+      Get Started
+      <i class="checkmark icon"></i>
     </div>
   </div>
+</div>
 
 </html>

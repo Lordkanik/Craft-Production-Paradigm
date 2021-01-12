@@ -4,11 +4,13 @@
     "strict": true,
     "module": "commonjs",
     "outDir": "dist",
-    "sourceMap": false
+    "sourceMap": true,
+    "allowJs": true
   },
   "include": [
     "src/**/*.ts",
-    "client/**/*.ts"
+    "client/**/*.ts",
+    "shared/**/*.js"
   ],
   "exclude": [
     "node_modules"

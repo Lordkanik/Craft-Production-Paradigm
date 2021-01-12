@@ -62,8 +62,6 @@ typings/
 
 #binarys
 data
-dist/
-semantic/
 
 #vscode
 .vscode/*
@@ -71,3 +69,14 @@ semantic/
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+#JetBrains WebStorm files
+.idea
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
+
+TypeScript Compiled Code
+dist/

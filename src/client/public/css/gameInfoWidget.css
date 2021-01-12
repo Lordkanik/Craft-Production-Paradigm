@@ -1,0 +1,56 @@
+.game-info-widget
+{
+    padding: 0 !important;
+}
+
+.game-info-widget-vertical
+{
+    width: 150px;
+}
+
+.game-info-widget-grid
+{
+    margin: 0 !important;
+}
+
+.game-info-widget-grid-vertical
+{
+    height: 100%;
+}
+
+.game-info-widget-grid-horizontal
+{
+    width: 100%;
+}
+
+.group-name-vertical, .player-name-vertical
+{
+    height: 50%;
+}
+
+.group-name-horizontal, .player-name-horizontal
+{
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    width: initial !important;
+}
+
+.group-name-grid, .player-name-grid
+{
+    margin: 0 !important;
+}
+
+.game-info-header-text
+{
+    width: 100%;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+.group-name-text, .player-name-text
+{
+    margin-top: 0.2em;
+    padding: 0 !important;
+    font-size: x-large;
+    white-space: nowrap;
+}

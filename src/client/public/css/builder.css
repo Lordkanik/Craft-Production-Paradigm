@@ -23,3 +23,68 @@ canvas {
   margin-left: auto;
   margin-right: auto;
 }
+
+.part-name-text {
+  margin-bottom: 0.3em;
+}
+
+#order
+{
+  margin: 0;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+#controls
+{
+  position: absolute;
+  width: 200px;
+  top: 0;
+  right: 0;
+  margin: 0;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.display {
+  font-size: 30px;
+  font-family: sans-serif;
+  text-align: left;
+  margin-top: 10px;
+}
+
+.left-items
+{
+  position: absolute;
+  display: flex;
+  left: 0;
+  top: 0;
+}
+
+#game-info-container
+{
+  margin-left: 10px;
+  margin-top: 2px;
+}
+
+.start, .stop, .reset
+{
+  font-size: 20px;
+  font-family: sans-serif;
+  margin: 0;
+  border-radius: 5px;
+  cursor: pointer;
+}
+#min.minutes:after
+{
+  content: ':';
+}
+#sec.seconds:after
+{
+  content: ':';
+}
+.Rules
+{
+  font-size: 18px;
+  font-family: sans-serif;
+}
