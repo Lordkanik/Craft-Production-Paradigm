@@ -16,35 +16,20 @@
   <link rel="stylesheet" type="text/css" href="css/startPage.css">
 </head>
 <body>
-<div class="top">
+<div style="padding-top: 1%">
   <div class="ui grid container">
     <div class="ui centered vertically divided grid">
-      <div class="row twelve wide column">
-        <h1 class="ui header">Welcome To The Manufacturing Simulation</h1>
+      <div class="row sixteen wide column">
+        <header style="background: navy; width: 200%; height: 120%; padding-top: 20px;">
+        <h1 class="ui header" style="color: white">Penn State Behrend Online Manufacturing Simulation</h1>
+        <p style="color: white">The game is currently a simplified version of the craft production paradigm.</p>
+        </header>
       </div>
-      <div class="row twelve wide column">
-        <h2 class="ui header">What is this?</h2>
-        <p class="sixteen wide column">
-          This is an online manufacturing simulation developed by Daniel Kovalevich, Zachary Gabel, Saaman Khalilollahi overseen by Dr. Faisal Aqlan,
-          and Dr. Hui Yang, from Penn State University. The objective of the program is to use car toys for teaching the basics of Lean manufacturing.
-          Simulations can be practical teaching aids that help students understand real industrial practices
-          and provide a space for application of theories and ideas learned in the classroom.
-        </p>
+      <div style="width: 30%">
+      <a href="Instructions.html"><button style="width: 250px; alignment: center; margin-top: 5%">Instructions</button></a>
       </div>
-      <div class="row twelve wide column">
-        <h2 class="ui header">How does the game work?</h2>
-        <p class="sixteen wide column">
-          The game is currently a simplified version of the craft production paradigm. One person must start the game and
-          there must be three others to play along. Once the first user starts the game, the server will generate a pin
-          for the others to use to join the game. As a player, you will be able to chose one of four positions: Customer,
-          Manufacturer, Supplier, and Assembler. As the customer, you will be placing orders and inspecting the models that come
-          back. As the manufacturer, you decide what kinds of pieces will be required for the customer order. The supplier
-          is very similar to the manufacturer but can also account for extra pieces and the supplier order is sent to the
-          assembler. The assembler puts the model together in 3D space inside the THREE.js viewing engine. Once they finish
-          the assembling, the model goes back to the customer for viewing.
-        </p>
-      </div>
-      <div class="row twelve wide column">
+
+      <div class="row twelve wide column" style="margin-top: 1%">
         <div class="eight wide center aligned column">
           <h3 class="ui center aligned header">Start a new game</h3>
           <div id="new-game" class="ui big blue labeled icon button">
@@ -62,6 +47,17 @@
             Join Game
           </div>
         </div>
+      </div>
+      <div class="row fourteen wide column">
+        <h5 class="ui header">Acknowledgements</h5>
+        <p class="sixteen wide column" style="font-size: small">
+          This online manufacturing simulation was originally developed by Daniel Kovalevich, Zachary Gabel, Saaman Khalilollahi, and overseen by Dr. Faisal Aqlan and
+          Dr. Hui Yang, from Penn State University. The project has since been modified by Cameron Butts, Cameron coursey, and Nicholas Dipasquale.
+
+          The objective of the program is to use car toys for teaching the basics of Lean manufacturing.
+          Simulations can be practical teaching aids that help students understand real industrial practices
+          and provide a space for application of theories and ideas learned in the classroom.
+        </p>
       </div>
       <div class="row twelve wide column"></div>
     </div>
