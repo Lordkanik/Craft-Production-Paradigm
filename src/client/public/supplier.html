@@ -25,28 +25,72 @@
   </head>
   <body>
     <div class="ui centered grid">
+		<div id="game-info-container" style="height: 18vh"></div>
       <div class="nine wide column">
         <div class="ui centered grid">
 			<div class="row">
 			  <div class="ui centered grid">
 				  <div class="row">
-					<h1 id="header" class="ui header">
-					  <i class="truck icon"></i>
+					<h1 id="header" style="font-size: 60px;alignment: center; margin-bottom: 21px" class="ui header">
+					  <!--<i class="truck icon"></i>-->
 					  Supplier
 					</h1>
 							</div>
-					<div id="game-info-container"></div>
-				  <div>
-				  <a href="Instructions_supplier.html"><button style="width: 250px; font-size: x-large;height: 50px; alignment: center; border: none; border-radius: 4px; margin-top: 5%; background: #0071c5; color: white">Instructions</button></a>
-				  </div>
-					  <button class="ui massive green button" id="order">Orders From Manufacturer</button>
 			  </div>
 			</div>
-          <div id="supply-grid">
-		  </div>
+
         </div>
       </div>
     </div>
+
+	<div style="alignment: center;">
+		<div style="background: #041E42; float: left; width: 25%; height: 100vh; text-align: center;border-right:3px solid black; color: white">
+			<h1>Order:</h1>
+
+		</div>
+
+		<div style="display: inline-block; width: 50%; text-align: center; border-top:3px solid black" >
+
+			<div>
+				<a href="Instructions_supplier.html"><button style="width: 250px; font-size: x-large;height: 50px; alignment: center; border: none; background: #0071c5; color: white; margin-top: 10px;border-radius: 4px">Main Body Blocks</button></a>
+				<a href="Instructions_supplier.html"><button style="width: 250px; font-size: x-large;height: 50px; alignment: center; border: none;  background: #0071c5; color: white; margin-top: 10px;border-radius: 4px">Wheel Blocks</button></a>
+			</div>
+			<div>
+				<a href="Instructions_supplier.html"><button style="width: 250px; font-size: x-large;height: 50px; alignment: center; border: none; background: #0071c5; color: white; margin-top: 10px;border-radius: 4px">Decorative Pieces</button></a>
+				<a href="Instructions_supplier.html"><button style="width: 250px; font-size: x-large;height: 50px; alignment: center; border: none;  background: #0071c5; color: white; margin-top: 10px;border-radius: 4px">People</button></a>
+			</div>
+
+			<div style="border-top:3px solid black; margin-top: 10px">
+				<a href="Instructions_supplier.html"><button style="width: 250px; font-size: x-large;height: 50px; alignment: center; border: none; border-radius: 4px; margin-top: 1%; background: #0071c5; color: white">Instructions</button></a>
+				<button style="width: 250px; font-size: x-large;height: 50px; alignment: center; border: none; border-radius: 4px; margin-top: 1%; background: #0071c5; color: white" class="orders_btn" id="order">Orders</button>
+			</div>
+
+
+		</div>
+
+		<div style="background: #041E42;float: right; width: 25%; text-align: center;height: 100vh;border-left:3px solid black;color: white">
+			<h1>Cart:</h1>
+
+		</div>
+	</div>
+
+
+<!--
+	<div class="ui centered grid">
+		<div class="nine wide column">
+			<div class="ui centered grid">
+				<div class="row">
+					<div class="ui centered grid">
+						<div id="supply-grid">
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+-->
+
 
     <div class="ui basic modal" id="no-orders">
 			<div class="ui icon header">
