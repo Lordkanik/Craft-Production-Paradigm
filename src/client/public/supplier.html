@@ -45,7 +45,7 @@
 
 	<div style="alignment: center;">
 		<div style="background: #041E42; float: left; width: 25%; height: 100vh; text-align: center;border-right:3px solid black; color: white">
-			<h1>Orders:</h1>
+			<h1 style="margin-top: 10px">Orders:</h1>
 
 			<div style="margin-left: 15px" class="content">
 				<div class="description">
@@ -85,7 +85,7 @@
 		</div>
 
 		<div style="background: #041E42;float: right; width: 25%; text-align: center;height: 100vh;border-left:3px solid black;color: white">
-			<h1>Cart:</h1>
+			<h1 style="margin-top: 10px">Cart:</h1>
 			<div style="alignment: bottom" class="actions">
 			<div id="send-supply-order" class="ui green right labeled icon button">
 				Send Pieces To Assembler
@@ -103,21 +103,22 @@
 	</div>
 
 
-
-	<div style="margin-top: 25px" class="ui centered grid">
+	<scroll-container>
+	<div style="margin-top: 25px; height: 20vh" class="ui centered grid">
 		<div class="nine wide column">
 			<div class="ui centered grid">
 				<div class="row">
 					<div class="ui centered grid">
-						<div id="supply-grid">
-						</div>
+
+						<div id="supply-grid"></div>
+
 					</div>
 				</div>
 
 			</div>
 		</div>
 	</div>
-
+	</scroll-container>
 
 
     <div class="ui basic modal" id="no-orders">
@@ -155,7 +156,7 @@
 				</div>
 			</div>
 		</div>
-	
+
 		<div class="ui mini modal" id="ready-request">
 			<div class="header">
 				Order Information

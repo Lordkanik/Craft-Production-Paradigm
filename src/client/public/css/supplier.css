@@ -6,6 +6,14 @@
   margin-bottom: 1.5em;
 }
 
+scroll-container {
+  display: block;
+  width: 50%;
+  height: 75vh;
+  margin-top: 10px;
+  overflow-y: scroll;
+  scroll-behavior: smooth;
+}
 .picker {
   margin-top: 1em;
   margin-bottom: 1em;
