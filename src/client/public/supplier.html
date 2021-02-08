@@ -45,24 +45,40 @@
 
 	<div style="alignment: center;">
 		<div style="background: #041E42; float: left; width: 25%; height: 100vh; text-align: center;border-right:3px solid black; color: white">
-			<h1>Order:</h1>
+			<h1>Orders:</h1>
 
+			<div style="margin-left: 15px" class="content">
+				<div class="description">
+					<span style="text-align: left;" id="order-info"></span>
+				</div>
+			</div>
+
+			<div style="alignment: bottom" class="actions">
+				<div id="left" class="ui green button">
+					<i class="angle double left icon"></i>
+				</div>
+				<div id="right" class="ui green button">
+					<i class="angle double right icon"></i>
+				</div>
+
+
+			</div>
 		</div>
 
 		<div style="display: inline-block; width: 50%; text-align: center; border-top:3px solid black" >
 
 			<div>
-				<a href="Instructions_supplier.html"><button style="width: 250px; font-size: x-large;height: 50px; alignment: center; border: none; background: #0071c5; color: white; margin-top: 10px;border-radius: 4px">Main Body Blocks</button></a>
-				<a href="Instructions_supplier.html"><button style="width: 250px; font-size: x-large;height: 50px; alignment: center; border: none;  background: #0071c5; color: white; margin-top: 10px;border-radius: 4px">Wheel Blocks</button></a>
+				<a href="../instructions_supplier.html"><button style="width: 250px; font-size: x-large;height: 50px; alignment: center; border: none; background: #0071c5; color: white; margin-top: 10px;border-radius: 4px">Main Body Blocks</button></a>
+				<a href="../instructions_supplier.html"><button style="width: 250px; font-size: x-large;height: 50px; alignment: center; border: none;  background: #0071c5; color: white; margin-top: 10px;border-radius: 4px">Wheel Blocks</button></a>
 			</div>
 			<div>
-				<a href="Instructions_supplier.html"><button style="width: 250px; font-size: x-large;height: 50px; alignment: center; border: none; background: #0071c5; color: white; margin-top: 10px;border-radius: 4px">Decorative Pieces</button></a>
-				<a href="Instructions_supplier.html"><button style="width: 250px; font-size: x-large;height: 50px; alignment: center; border: none;  background: #0071c5; color: white; margin-top: 10px;border-radius: 4px">People</button></a>
+				<a href="../instructions_supplier.html"><button style="width: 250px; font-size: x-large;height: 50px; alignment: center; border: none; background: #0071c5; color: white; margin-top: 10px;border-radius: 4px">Decorative Pieces</button></a>
+				<a href="../instructions_supplier.html"><button style="width: 250px; font-size: x-large;height: 50px; alignment: center; border: none;  background: #0071c5; color: white; margin-top: 10px;border-radius: 4px">People</button></a>
 			</div>
 
 			<div style="border-top:3px solid black; margin-top: 10px">
-				<a href="Instructions_supplier.html"><button style="width: 250px; font-size: x-large;height: 50px; alignment: center; border: none; border-radius: 4px; margin-top: 1%; background: #0071c5; color: white">Instructions</button></a>
-				<button style="width: 250px; font-size: x-large;height: 50px; alignment: center; border: none; border-radius: 4px; margin-top: 1%; background: #0071c5; color: white" class="orders_btn" id="order">Orders</button>
+				<a href="../instructions_supplier.html"><button style="width: 250px; font-size: x-large;height: 50px; alignment: center; border: none; border-radius: 4px; margin-top: 1%; background: #0071c5; color: white">Instructions</button></a>
+				<!--<button style="width: 250px; font-size: x-large;height: 50px; alignment: center; border: none; border-radius: 4px; margin-top: 1%; background: #0071c5; color: white" class="orders_btn" id="order">Orders</button>-->
 			</div>
 
 
@@ -70,13 +86,25 @@
 
 		<div style="background: #041E42;float: right; width: 25%; text-align: center;height: 100vh;border-left:3px solid black;color: white">
 			<h1>Cart:</h1>
+			<div style="alignment: bottom" class="actions">
+			<div id="send-supply-order" class="ui green right labeled icon button">
+				Send Pieces To Assembler
+				<i class="checkmark icon"></i>
 
+			</div>
+				<div class="ui hidden negative message" id="error-message">
+					<div class="ui centered header">
+						Supply Order Doesn't Match Manufacturer Order
+					</div>
+					<p style="text-align: center;">You can have more pieces in the supply order but you must at least include the pieces requested!</p>
+				</div>
+			</div>
 		</div>
 	</div>
 
 
-<!--
-	<div class="ui centered grid">
+
+	<div style="margin-top: 25px" class="ui centered grid">
 		<div class="nine wide column">
 			<div class="ui centered grid">
 				<div class="row">
@@ -89,7 +117,7 @@
 			</div>
 		</div>
 	</div>
--->
+
 
 
     <div class="ui basic modal" id="no-orders">
@@ -108,35 +136,8 @@
 		</div>
 
 		<div class="ui modal" id="ready-order">
-			<div class="header">
-				Order Information
-			</div>
-			<div class="content">
-				<div class="description">
-					<div class="ui header">Order Sent From the Manufacturer</div>
-					<span id="order-info"></span>
-				</div>
-			</div>
-			<div class="ui hidden negative message" id="error-message">
-				<div class="ui centered header">
-					Supply Order Doesn't Match Manufacturer Order
-				</div>
-				<p style="text-align: center;">You can have more pieces in the supply order but you must at least include the pieces requested!</p>
-			</div>
-			<div class="actions">
-				<div id="left" class="ui red button">
-					<i class="angle double left icon"></i>
-				</div>
-				<div id="right" class="ui red button">
-					<i class="angle double right icon"></i>
-				</div>
-				<div class="ui black deny button">
-					Close Window
-				</div>
-				<div id="send-supply-order" class="ui green right labeled icon button">
-					Send Pieces To Assembler
-					<i class="checkmark icon"></i>
-				</div>
+			<div style="text-align: center;" class="header">
+				Order Sent
 			</div>
 		</div>
 
@@ -154,6 +155,7 @@
 				</div>
 			</div>
 		</div>
+
 
 		<div class="ui mini modal" id="ready-request">
 			<div class="header">
