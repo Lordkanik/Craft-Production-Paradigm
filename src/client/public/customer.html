@@ -13,76 +13,136 @@
     <script src="/../js/customer.js"></script>
 </head>
 <body class="dimmable">
-<div class="ui centered grid" id="header">
+
+
+<div class="ui centered grid">
     <div class="nine wide column">
         <div class="ui centered grid">
             <div class="row">
                 <div class="ui centered grid">
                     <div class="row">
-                        <h1 class="ui header">
-                            <i class="credit card outline icon"></i>
+                        <h1 style="font-size: 60px;alignment: center; margin-bottom: 39px"  id="header" class="ui header">
+                            <!--<i class="industry icon"></i>-->
                             Customer
                         </h1>
                     </div>
-                    <div class="row">
-                        <button class="ui massive green button"  id="order">View Orders Placed</button>
-                        <a href="Instructions_customer.html"><button class="ui massive green button" style="width: 275px; font-size: x-large;height: 61px; alignment: center; border: none; border-radius: 4px; background: #0071c5; color: white">Instructions</button></a>
-                    </div>
-                    <div id="game-info-container"></div>
+                    <div id="game-info-container" style="height: 75%; margin-top: 20px"></div>
                 </div>
             </div>
-            <div class="ui divider" style="width: 100%;"></div>
-            <div class="row">
-                <button class="ui green button" id="generate">Generate Random Order</button>
-            </div>
-            <div class="row">
-                <div class="ui horizontal divider">OR</div>
-            </div>
-            <div class="row">
-                <h3 class="ui header">Pick a model to order</h3>
-            </div>
-            <div class="ui celled grid">
-                <div class="row">
-                    <div class="eight wide column">
-                        <img id="1" src="/../images/Option 1.PNG">
-                    </div>
-                    <div class="eight wide column">
-                        <img id="2" src="/../images/Option 2.PNG">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="eight wide column">
-                        <img id="3" src="/../images/Option 3.PNG">
-                    </div>
-                    <div class="eight wide column">
-                        <img id="4" src="/../images/Option 4.PNG">
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="ui horizontal divider">OR</div>
-            </div>
-            <div class="row">
-                <h3 class="ui header">Create a custom order</h3>
-            </div>
-            <div class="row">
-                <form id="custom-order-form" action="https://manufacturing-sim-game-api.herokuapp.com/sendOrder" method="post" enctype="multipart/form-data" style="width: 100%;">
-                    <div class="ui celled centered grid image-picker grid">
-                        <span class="row" style="margin-bottom: 5px;">Select an image that depicts the product:</span>
-                        <p>
-                            <button type="button" id="file-button">
-                                CHOOSE A FILE
-                                <input type="file" name="custom-order-image" id="real-file" required="" style="top: 82.4px; left: 334.336px;">
-                            </button>
-                            <span id="custom-text">No file chosen.</span>
-                        </p>
-                    </div>
-                    <textarea name="custom-order-desc" placeholder="Add notes about this item..." style="width: 100%; height: 100px; margin-bottom: 5px"></textarea>
-                    <button type="submit" id="custom-order-submit" name="custom-order-submit" class="ui large green button">Send Order</button>
-                </form>
-            </div>
+
         </div>
     </div>
+</div>
+
+<div style="alignment: center;">
+    <div style="background: #041E42; float: left; width: 25%; height: 100vh; text-align: center;border-right:3px solid black; color: white">
+        <h1 style="margin-top: 10px">Orders:</h1>
+
+        <div style="margin-right: 50px; alignment: center; text-align: center" class="content">
+            <div class="header-lr-filler"></div>
+            <div id="filter-options" style="alignment: center; text-align: center">
+                <span style="text-align: center;font-size: small; " id="filter-options-text">Filter orders:</span>
+
+                <input style="text-align: center;font-size: small; "id="in-progress" type="checkbox" checked="">
+                <label style="text-align: center;font-size: small; "for="in-progress">In progress</label>
+                <input style="text-align: center;font-size: small; "id="ready-for-inspection" type="checkbox" checked="">
+                <label style="text-align: center;font-size: small; "for="ready-for-inspection">Ready for inspection</label>
+                <input style="text-align: center;font-size: small; "id="sent-to-customer" type="checkbox">
+                <label style="text-align: center;font-size: small; "for="sent-to-customer">Sent to customer</label>
+
+            </div>
+        </div>
+        <div id="order-display" class="image content" style="display: none;">
+            <div class="ui image order-image-container">
+                <img id="order-image">
+            </div>
+            <div class="description">
+                <div class="ui header" style="color: white; margin-top: 5px">Order Details:</div>
+                <span id="order-info"></span>
+            </div>
+        </div>
+        <div id="no-order-message" class="ui negative message">
+            <div class="ui centered header">
+                No Orders Available
+            </div>
+            <p style="text-align: center;">No orders are available that match the selected filters.</p>
+        </div>
+        <div class="actions">
+            <div id="left" class="ui red button disabled">
+                <i class="angle double left icon"></i>
+            </div>
+            <div id="right" class="ui red button disabled">
+                <i class="angle double right icon"></i>
+            </div>
+
+        </div>
+        </div>
+    </div>
+
+    <div style="display: inline-block; width: 50%; text-align: center; border-top:3px solid black" >
+
+        <div class="ui divider" style="width: 100%;"></div>
+        <div class="row">
+            <button style="width: 275px; font-size:large;height: 61px; alignment: center; border-radius: 4px; background: green; color: white" class="ui massive green button" id="generate">Generate Random Order</button>
+            <a href="Instructions_customer.html"><button class="ui massive green button" style="width: 275px; font-size: x-large;height: 61px; alignment: center; border: none; border-radius: 4px; background: #0071c5; color: white">Instructions</button></a>
+        </div>
+        <div class="row">
+            <div class="ui horizontal divider">OR</div>
+        </div>
+        <div class="row">
+            <h3 class="ui header">Pick a model to order</h3>
+        </div>
+        <div class="ui celled grid">
+            <div class="row">
+                <div class="eight wide column">
+                    <img id="1" src="/../images/Option 1.PNG">
+                </div>
+                <div class="eight wide column">
+                    <img id="2" src="/../images/Option 2.PNG">
+                </div>
+            </div>
+            <div class="row">
+                <div class="eight wide column">
+                    <img id="3" src="/../images/Option 3.PNG">
+                </div>
+                <div class="eight wide column">
+                    <img id="4" src="/../images/Option 4.PNG">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="ui horizontal divider">OR</div>
+        </div>
+        <div class="row">
+            <h3 class="ui header">Create a custom order</h3>
+        </div>
+        <div class="row">
+            <form id="custom-order-form" action="https://manufacturing-sim-game-api.herokuapp.com/sendOrder" method="post" enctype="multipart/form-data" style="width: 100%;">
+                <div class="ui celled centered grid image-picker grid">
+                    <span class="row" style="margin-bottom: 5px;">Select an image that depicts the product:</span>
+                    <p>
+                        <button type="button" id="file-button">
+                            CHOOSE A FILE
+                            <input type="file" name="custom-order-image" id="real-file" required="" style="top: 82.4px; left: 334.336px;">
+                        </button>
+                        <span id="custom-text">No file chosen.</span>
+                    </p>
+                </div>
+                <textarea name="custom-order-desc" placeholder="Add notes about this item..." style="width: 100%; height: 100px; margin-bottom: 5px"></textarea>
+                <button type="submit" id="custom-order-submit" name="custom-order-submit" class="ui large green button">Send Order</button>
+            </form>
+        </div>
+
+
+    </div>
+
+<div style="background: #041E42;float: right; width: 25%; text-align: center;height: 100vh;border-left:3px solid black;color: white">
+    <h1 style="margin-top: 10px">Cart:</h1>
+    <div style="alignment: bottom" class="actions">
+        <!--<button class="ui large disabled green button" id="send-supplier-order">Send Supplier Order</button>-->
+    </div>
+
+</div>
 </div>
 
 <div class="ui basic modal" id="confirm-standard-order-modal">
@@ -127,47 +187,6 @@
 
 
 <div class="ui dimmer modals page transition hidden"><div class="ui modal transition hidden" id="ready-order">
-    <div class="header">
-        <span id="order-info-text">Order Information</span>
-        <div class="header-lr-filler"></div>
-        <div id="filter-options">
-            <span id="filter-options-text">Filter orders:</span>
-            <input id="in-progress" type="checkbox">
-            <label for="in-progress">In progress</label>
-            <input id="ready-for-inspection" type="checkbox" checked="">
-            <label for="ready-for-inspection">Ready for inspection</label>
-            <input id="sent-to-customer" type="checkbox">
-            <label for="sent-to-customer">Sent to customer</label>
-        </div>
-    </div>
-    <div id="order-display" class="image content" style="display: none;">
-        <div class="ui image order-image-container">
-            <img id="order-image" src="">
-        </div>
-        <div class="description">
-            <div class="ui header">Orders Sent</div>
-            <span id="order-info"></span>
-        </div>
-    </div>
-    <div id="no-order-message" class="ui negative message">
-        <div class="ui centered header">
-            No Orders Available
-        </div>
-        <p style="text-align: center;">No orders are available that match the selected filters.</p>
-    </div>
-    <div class="actions">
-        <div id="left" class="ui red button disabled">
-            <i class="angle double left icon"></i>
-        </div>
-        <div id="right" class="ui red button disabled">
-            <i class="angle double right icon"></i>
-        </div>
-        <div class="ui black deny button">
-            Close Window
-        </div>
-        <div id="view-model" class="ui disabled positive right labeled icon button">
-            View Model
-            <i class="checkmark icon"></i>
-        </div>
-    </div>
+    <div class="header2">
+
 </div></div></body></html>
