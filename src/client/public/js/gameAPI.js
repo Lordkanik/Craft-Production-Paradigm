@@ -1,5 +1,5 @@
 const GameAPI = {
-  rootURL: 'https://mfgsim-api.herokuapp.com',
+  rootURL: 'http://localhost:3000',
   /**
    * @returns {string}
    */

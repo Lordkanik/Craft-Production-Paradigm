@@ -63,6 +63,7 @@ function initButtons() {
 
 
       updateCostWeight();
+      updateCart();
       $('#supply-order-sent').modal('show');
     }).catch((xhr, status, error) => {
       console.log(error);
@@ -187,4 +188,13 @@ function updateCostWeight()
 
   $('#total-cost-text').text(`$${partProperties.totalPartCost(partCounts).toFixed(2)}`);
   $('#total-weight-text').text(partProperties.totalPartWeight(partCounts).toFixed(2));
+}
+
+function updateCart()
+{
+  let partCounts = $('#supply-grid').partGrid('getCounts');
+
+  $('#cart-text').text(`${partCounts}`);
+  $('#total-weight-text').text(partProperties.totalPartWeight(partCounts).toFixed(2));
+
 }
